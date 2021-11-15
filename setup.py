@@ -26,11 +26,63 @@ class Snake:
         self.body_bl = pygame.image.load('graphics/body_bl.png').convert_alpha()
 
     def draw_snake(self):
-        for block in self.body:
+        self.update_head_graphics()
+        self.update_tail_graphics()
+
+        for i,block in enumerate(self.body):
+            #rect for positioning
             x_pos = int(block.x * cell_size)
             y_pos = int(block.y * cell_size)
             block_rect = pygame.Rect(x_pos, y_pos, cell_size, cell_size)
-            pygame.draw.rect(screen, (183,111,122), block_rect)
+            
+            #what direction the face is heading
+            if i == 0:
+                screen.blit(self.head, block_rect)
+            elif i == len(self.body) - 1:
+                screen.blit(self.tail, block_rect)
+            else:
+                previous_block = self.body[i + 1] - block
+                next_block = self.body[i - 1] - block
+                if previous_block.x == next_block.x: #if both have same x we know it will be a vertical block, if same y = horizontal
+                    screen.blit(self.body_vertical, block_rect)
+                elif previous_block.y == next_block.y:
+                    screen.blit(self.body_horizontal, block_rect)
+                else:
+                    if previous_block.x == -1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == -1:
+                        screen.blit(self.body_tl, block_rect) #corner is going up and left (topleft)
+                    elif previous_block.x == -1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == -1:
+                        screen.blit(self.body_bl, block_rect)
+                    elif previous_block.x == 1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == 1:
+                        screen.blit(self.body_tr, block_rect)
+                    elif previous_block.x == 1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == 1:
+                        screen.blit(self.body_br, block_rect)
+
+
+
+            # else:
+            #     pygame.draw.rect(screen,(150,100,100), block_rect)
+
+    def update_head_graphics(self):
+        head_relation = self.body[1] - self.body[0]
+        if head_relation == Vector2(1,0): #means head is to left of next block
+            self.head = self.head_left
+        elif head_relation == Vector2(-1,0):
+            self.head = self.head_right
+        elif head_relation == Vector2(0,1): #block below snake that means we are moving up
+            self.head = self.head_up
+        elif head_relation == Vector2(0,-1):
+            self.head = self.head_down
+
+    def update_tail_graphics(self):
+        tail_relation = self.body[-2] - self.body[-1]
+        if tail_relation == Vector2(1,0): 
+            self.tail = self.tail_left
+        elif tail_relation == Vector2(-1,0):
+            self.tail = self.tail_right
+        elif tail_relation == Vector2(0,1): 
+            self.tail = self.tail_up
+        elif tail_relation == Vector2(0,-1):
+            self.tail = self.tail_down
 
     def move_snake(self):
         if self.new_block == True:
