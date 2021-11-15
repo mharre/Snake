@@ -163,7 +163,7 @@ class Main():
                         pygame.draw.rect(screen, grass_color, grass_rect)
 
     def draw_score(self):
-        score_text = str((len(self.snake.body) - 3) * 10) 
+        score_text = str(len(self.snake.body) - 3)
         score_surface =  game_font.render(score_text,True,(56,74,12))
 
         score_x = int(cell_size*cell_number - 60)
