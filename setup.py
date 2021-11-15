@@ -7,6 +7,24 @@ class Snake:
         self.direction = Vector2(1,0)
         self.new_block = False
 
+        self.head_up = pygame.image.load('graphics/head_up.png').convert_alpha()
+        self.head_down = pygame.image.load('graphics/head_down.png').convert_alpha()
+        self.head_right = pygame.image.load('graphics/head_right.png').convert_alpha()
+        self.head_left = pygame.image.load('graphics/head_left.png').convert_alpha()
+        
+        self.tail_up = pygame.image.load('graphics/tail_up.png').convert_alpha()
+        self.tail_down = pygame.image.load('graphics/tail_down.png').convert_alpha()
+        self.tail_right = pygame.image.load('graphics/tail_right.png').convert_alpha()
+        self.tail_left = pygame.image.load('graphics/tail_left.png').convert_alpha()
+
+        self.body_vertical = pygame.image.load('graphics/body_vertical.png').convert_alpha()
+        self.body_horizontal = pygame.image.load('graphics/body_horizontal.png').convert_alpha()
+
+        self.body_tr = pygame.image.load('graphics/body_tr.png').convert_alpha()
+        self.body_tl = pygame.image.load('graphics/body_tl.png').convert_alpha()
+        self.body_br = pygame.image.load('graphics/body_br.png').convert_alpha()
+        self.body_bl = pygame.image.load('graphics/body_bl.png').convert_alpha()
+
     def draw_snake(self):
         for block in self.body:
             x_pos = int(block.x * cell_size)
@@ -34,7 +52,8 @@ class Fruit:
 
     def draw_fruit(self):
         fruit_rect = pygame.Rect(int(self.pos.x * cell_size), int(self.pos.y * cell_size), cell_size, cell_size) #x,y,w,h
-        pygame.draw.rect(screen,(126,166,114),fruit_rect) #surface to draw on, color, rectangle
+        screen.blit(apple,fruit_rect) #always need a rect or surface/position
+        # pygame.draw.rect(screen,(126,166,114),fruit_rect) #surface to draw on, color, rectangle
 
     def randomize(self):
         self.x = random.randint(0, cell_number-1)
@@ -73,12 +92,11 @@ class Main():
         sys.exit()
         
 pygame.init()
-
 cell_size = 40
 cell_number = 20
-
 screen = pygame.display.set_mode((cell_number * cell_size , cell_number * cell_size))
 clock = pygame.time.Clock()
+apple = pygame.image.load('graphics/apple.png').convert_alpha()
 
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE, 150) #in milliseconds
